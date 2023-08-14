@@ -1,0 +1,19 @@
+version : '3'
+
+networks:
+  basic:
+    external: true
+
+
+services:
+  goweb:
+    container_name: test
+    image: nunu-test/demo-api:v1
+    environment:
+      - APP_CONF=config/local.yml
+    volumes:
+      - ./config/local.yml:/data/app/config/local.yml
+    ports:
+      - 8080:8000
+    networks:
+      - basic
