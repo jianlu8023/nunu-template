@@ -474,4 +474,43 @@ func Error(ctx *gin.Context, message string, code int, obj interface{}) {
 ```
 
 动画演示
+
 ![](https://raw.githubusercontent.com/loveinsky100/goanno/master/preview/goanno_func.gif)
+
+## 容器化部署
+
+### 打包
+
+1. 手动打包
+```bash
+                 
+docker build -t  1.1.1.1:5000/demo-api:v1 --build-arg APP_CONF=config/prod.yml --build-arg  APP_RELATIVE_PATH=./cmd/server/...  .
+```
+2. make docker方式打包
+
+在项目根目录执行
+```bash
+make docker
+```
+
+
+### 编写容器编排文件
+```yaml
+version : '3'
+
+networks:
+  basic:
+    external: true
+services:
+  goweb:
+    container_name: test
+    image: nunu-test/demo-api:v1
+    environment:
+      - APP_CONF=config/local.yml
+    volumes:
+      - ./config/local.yml:/data/app/config/local.yml
+    ports:
+      - 8080:8000
+    networks:
+      - basic
+```
