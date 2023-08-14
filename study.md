@@ -25,7 +25,11 @@ go install github.com/go-nunu/nunu@latest
 
 ### 配置环境变量
 
+notes:
+
+```text
 将${GOPATH}/bin 加入环境变量,即可在终端使用nunu命令
+```
 
 ### 创建新项目
 
@@ -106,8 +110,6 @@ notes:
 
 ```text
 nunu create all user 会创建controller、service、dao、entity并放置到对应文件夹下
-
-
 ```
 
 ### 启动项目
@@ -140,8 +142,6 @@ handler
 
 ```go
 package handler
-
-
 
 // 定义各种接口
 type UserHandler interface {
@@ -177,35 +177,34 @@ func (h *userHandler) Register(ctx *gin.Context) {
 	}
 	resp.HandleSuccess(ctx, nil)
 }
-
 func (h *userHandler) Login(ctx *gin.Context) {
 }
-
 func (h *userHandler) GetProfile(ctx *gin.Context) {
 	resp.HandleSuccess(ctx, user)
 }
-
 func (h *userHandler) UpdateProfile(ctx *gin.Context) {
 	resp.HandleSuccess(ctx, nil)
 }
-
 ```
 
 service
 
 ```go
 package service
+
 // gorm 结构
 type RegisterRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
 }
+
 // gorm 结构
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
 // gorm 结构
 type UpdateProfileRequest struct {
 	Nickname string `json:"nickname"`
@@ -246,15 +245,12 @@ func (s *userService) Register(ctx context.Context, req *RegisterRequest) error 
 	// 具体实现逻辑
 	return nil
 }
-
 func (s *userService) Login(ctx context.Context, req *LoginRequest) (string, error) {
 	return "", nil
 }
-
 func (s *userService) GetProfile(ctx context.Context, userId string) (*model.User, error) {
 	return nil, nil
 }
-
 func (s *userService) UpdateProfile(ctx context.Context, userId string, req *UpdateProfileRequest) error {
 	return nil
 }
@@ -264,6 +260,7 @@ repository
 
 ```go
 package repository
+
 // 定义dao各种方法
 type UserRepository interface {
 	Create(ctx context.Context, user *model.User) error
@@ -271,7 +268,6 @@ type UserRepository interface {
 	GetByID(ctx context.Context, id string) (*model.User, error)
 	GetByUsername(ctx context.Context, username string) (*model.User, error)
 }
-
 type userRepository struct {
 	*Repository
 }
@@ -287,19 +283,15 @@ func (r *userRepository) Create(ctx context.Context, user *model.User) error {
 	}
 	return nil
 }
-
 func (r *userRepository) Update(ctx context.Context, user *model.User) error {
 	return nil
 }
-
 func (r *userRepository) GetByID(ctx context.Context, userId string) (*model.User, error) {
 	return nil, nil
 }
-
 func (r *userRepository) GetByUsername(ctx context.Context, username string) (*model.User, error) {
 	return nil, nil
 }
-
 ```
 
 notes:
@@ -374,9 +366,24 @@ func newApp(*viper.Viper, *log.Logger) (*gin.Engine, func(), error) {
 
 ```
 
+notes:
+
+```text
+wire_gen.go 不能自己修改，只能使用nunu wire命令去更新生成
+
+wire命令目前没了解如何去使用
+```
+
 3. 命令行执行 nunu wire 注入依赖
 
-4. 命令行执行 nunu run 选择 migration 数据迁移
+4. （可选）命令行执行 nunu run 选择 migration 数据迁移
+
+notes:
+
+```text
+此步骤不是必须执行步骤，
+执行此步骤原因：数据库中不存在相关表定义，此步骤可根据model包下实体进行表定义
+```
 
 5. 命令行执行 nunu run 选择 server 启动服务
 
