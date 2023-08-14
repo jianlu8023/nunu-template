@@ -141,13 +141,7 @@ handler
 ```go
 package handler
 
-import (
-	"github.com/gin-gonic/gin"
-	"myweb/internal/service"
-	"myweb/pkg/helper/resp"
-	"github.com/pkg/errors"
-	"net/http"
-)
+
 
 // 定义各种接口
 type UserHandler interface {
@@ -177,26 +171,21 @@ func (h *userHandler) Register(ctx *gin.Context) {
 		resp.HandleError(ctx, http.StatusBadRequest, 1, errors.Wrap(err, "invalid request").Error(), nil)
 		return
 	}
-
 	if err := h.userService.Register(ctx, req); err != nil {
 		resp.HandleError(ctx, http.StatusBadRequest, 1, errors.Wrap(err, "invalid request").Error(), nil)
 		return
 	}
-
 	resp.HandleSuccess(ctx, nil)
 }
 
 func (h *userHandler) Login(ctx *gin.Context) {
-
 }
 
 func (h *userHandler) GetProfile(ctx *gin.Context) {
-
 	resp.HandleSuccess(ctx, user)
 }
 
 func (h *userHandler) UpdateProfile(ctx *gin.Context) {
-
 	resp.HandleSuccess(ctx, nil)
 }
 
@@ -206,29 +195,17 @@ service
 
 ```go
 package service
-
-import (
-	"context"
-	"myweb/internal/model"
-	"myweb/internal/repository"
-	"github.com/pkg/errors"
-	"golang.org/x/crypto/bcrypt"
-	"time"
-)
-
 // gorm 结构
 type RegisterRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
 }
-
 // gorm 结构
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
-
 // gorm 结构
 type UpdateProfileRequest struct {
 	Nickname string `json:"nickname"`
@@ -271,7 +248,6 @@ func (s *userService) Register(ctx context.Context, req *RegisterRequest) error 
 }
 
 func (s *userService) Login(ctx context.Context, req *LoginRequest) (string, error) {
-
 	return "", nil
 }
 
@@ -288,14 +264,6 @@ repository
 
 ```go
 package repository
-
-import (
-	"context"
-	"myweb/internal/model"
-	"github.com/pkg/errors"
-	"gorm.io/gorm"
-)
-
 // 定义dao各种方法
 type UserRepository interface {
 	Create(ctx context.Context, user *model.User) error
@@ -321,33 +289,15 @@ func (r *userRepository) Create(ctx context.Context, user *model.User) error {
 }
 
 func (r *userRepository) Update(ctx context.Context, user *model.User) error {
-	if err := r.db.Save(user).Error; err != nil {
-		return errors.Wrap(err, "failed to update user")
-	}
-
 	return nil
 }
 
 func (r *userRepository) GetByID(ctx context.Context, userId string) (*model.User, error) {
-	var user model.User
-	if err := r.db.Where("user_id = ?", userId).First(&user).Error; err != nil {
-
-		return nil, errors.Wrap(err, "failed to get user by ID")
-	}
-
-	return &user, nil
+	return nil, nil
 }
 
 func (r *userRepository) GetByUsername(ctx context.Context, username string) (*model.User, error) {
-	var user model.User
-	if err := r.db.Where("username = ?", username).First(&user).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, nil
-		}
-		return nil, errors.Wrap(err, "failed to get user by username")
-	}
-
-	return &user, nil
+	return nil, nil
 }
 
 ```
@@ -482,21 +432,26 @@ func Error(ctx *gin.Context, message string, code int, obj interface{}) {
 ### 打包
 
 1. 手动打包
+
+在项目根目录执行
+
 ```bash
                  
-docker build -t  1.1.1.1:5000/demo-api:v1 --build-arg APP_CONF=config/prod.yml --build-arg  APP_RELATIVE_PATH=./cmd/server/...  .
+docker build --no-cache -t  local-test/demo-api:v1 --build-arg APP_CONF=config/local.yml --build-arg  APP_RELATIVE_PATH=./cmd/server/... -f scripts/build/Dockerfile  .
 ```
+
 2. make docker方式打包
 
 在项目根目录执行
+
 ```bash
 make docker
 ```
 
-
 ### 编写容器编排文件
+
 ```yaml
-version : '3'
+version: '3'
 
 networks:
   basic:
