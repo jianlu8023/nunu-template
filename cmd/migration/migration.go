@@ -1,10 +1,10 @@
 package main
 
 import (
-	"nunu-template/internal/model"
-	"nunu-template/pkg/log"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
+	"nunu-template/pkg/log"
 )
 
 type Migrate struct {

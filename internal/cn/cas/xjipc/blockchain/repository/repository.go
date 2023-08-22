@@ -3,11 +3,10 @@ package repository
 import (
 	"context"
 	"fmt"
-	"nunu-template/pkg/log"
-	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"nunu-template/pkg/log"
 	"time"
 )
 

@@ -4,10 +4,10 @@
 package main
 
 import (
-	"nunu-template/internal/job"
-	"nunu-template/pkg/log"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/job"
+	"nunu-template/pkg/log"
 )
 
 var JobSet = wire.NewSet(job.NewJob)

@@ -19,4 +19,4 @@ build:
 
 .PHONY: docker
 docker:
-	docker build --no-cache -f scripts/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/server/... -t nunu-test/demo-api:v1 .
+	docker build --no-cache -f build/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/server/... -t nunu-test/demo-api:v1 .

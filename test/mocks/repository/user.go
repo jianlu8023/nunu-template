@@ -6,9 +6,9 @@ package mock_repository
 
 import (
 	context "context"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
 	reflect "reflect"
 
-	model "nunu-template/internal/model"
 	gomock "github.com/golang/mock/gomock"
 )
 

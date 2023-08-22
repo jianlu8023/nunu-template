@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"nunu-template/internal/model"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
 )
 
 type UserRepository interface {

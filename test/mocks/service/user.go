@@ -6,10 +6,10 @@ package mock_service
 
 import (
 	context "context"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/pkg/request"
 	reflect "reflect"
 
-	model "nunu-template/internal/model"
-	request "nunu-template/internal/pkg/request"
 	gomock "github.com/golang/mock/gomock"
 )
 
