@@ -19,4 +19,5 @@ build:
 
 .PHONY: docker
 docker:
-	docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/job/... -t 1.1.1.1:5000/demo-api:v1 .
+	docker build --no-cache -f build/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/server/... -t nunu-test/demo-api:v1 .
+

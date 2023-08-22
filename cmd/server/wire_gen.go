@@ -8,30 +8,30 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"nunu-template/internal/handler"
-	"nunu-template/internal/repository"
-	"nunu-template/internal/server"
-	"nunu-template/internal/service"
+	"github.com/google/wire"
+	"github.com/spf13/viper"
+	handler2 "nunu-template/internal/cn/cas/xjipc/blockchain/handler"
+	repository2 "nunu-template/internal/cn/cas/xjipc/blockchain/repository"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/server"
+	service2 "nunu-template/internal/cn/cas/xjipc/blockchain/service"
 	"nunu-template/pkg/helper/sid"
 	"nunu-template/pkg/jwt"
 	"nunu-template/pkg/log"
-	"github.com/google/wire"
-	"github.com/spf13/viper"
 )
 
 // Injectors from wire.go:
 
 func newApp(viperViper *viper.Viper, logger *log.Logger) (*gin.Engine, func(), error) {
 	jwtJWT := jwt.NewJwt(viperViper)
-	handlerHandler := handler.NewHandler(logger)
+	handlerHandler := handler2.NewHandler(logger)
 	sidSid := sid.NewSid()
-	serviceService := service.NewService(logger, sidSid, jwtJWT)
-	db := repository.NewDB(viperViper)
-	client := repository.NewRedis(viperViper)
-	repositoryRepository := repository.NewRepository(db, client, logger)
-	userRepository := repository.NewUserRepository(repositoryRepository)
-	userService := service.NewUserService(serviceService, userRepository)
-	userHandler := handler.NewUserHandler(handlerHandler, userService)
+	serviceService := service2.NewService(logger, sidSid, jwtJWT)
+	db := repository2.NewDB(viperViper)
+	client := repository2.NewRedis(viperViper)
+	repositoryRepository := repository2.NewRepository(db, client, logger)
+	userRepository := repository2.NewUserRepository(repositoryRepository)
+	userService := service2.NewUserService(serviceService, userRepository)
+	userHandler := handler2.NewUserHandler(handlerHandler, userService)
 	engine := server.NewServerHTTP(logger, jwtJWT, userHandler)
 	return engine, func() {
 	}, nil
@@ -39,8 +39,8 @@ func newApp(viperViper *viper.Viper, logger *log.Logger) (*gin.Engine, func(), e
 
 // wire.go:
 
-var HandlerSet = wire.NewSet(handler.NewHandler, handler.NewUserHandler)
+var HandlerSet = wire.NewSet(handler2.NewHandler, handler2.NewUserHandler)
 
-var ServiceSet = wire.NewSet(service.NewService, service.NewUserService)
+var ServiceSet = wire.NewSet(service2.NewService, service2.NewUserService)
 
-var RepositorySet = wire.NewSet(repository.NewDB, repository.NewRedis, repository.NewRepository, repository.NewUserRepository)
+var RepositorySet = wire.NewSet(repository2.NewDB, repository2.NewRedis, repository2.NewRepository, repository2.NewUserRepository)

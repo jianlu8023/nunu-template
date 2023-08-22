@@ -1,5 +1,6 @@
 storage
 .idea
 *.log
-scripts/docker-compose/conf
-scripts/docker-compose/data
+build/docker-compose/conf
+build/docker-compose/data
+vendor

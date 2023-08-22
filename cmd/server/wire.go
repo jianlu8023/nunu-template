@@ -5,32 +5,32 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"nunu-template/internal/handler"
-	"nunu-template/internal/repository"
-	"nunu-template/internal/server"
-	"nunu-template/internal/service"
+	"github.com/google/wire"
+	"github.com/spf13/viper"
+	handler2 "nunu-template/internal/cn/cas/xjipc/blockchain/handler"
+	repository2 "nunu-template/internal/cn/cas/xjipc/blockchain/repository"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/server"
+	service2 "nunu-template/internal/cn/cas/xjipc/blockchain/service"
 	"nunu-template/pkg/helper/sid"
 	"nunu-template/pkg/jwt"
 	"nunu-template/pkg/log"
-	"github.com/google/wire"
-	"github.com/spf13/viper"
 )
 
 var HandlerSet = wire.NewSet(
-	handler.NewHandler,
-	handler.NewUserHandler,
+	handler2.NewHandler,
+	handler2.NewUserHandler,
 )
 
 var ServiceSet = wire.NewSet(
-	service.NewService,
-	service.NewUserService,
+	service2.NewService,
+	service2.NewUserService,
 )
 
 var RepositorySet = wire.NewSet(
-	repository.NewDB,
-	repository.NewRedis,
-	repository.NewRepository,
-	repository.NewUserRepository,
+	repository2.NewDB,
+	repository2.NewRedis,
+	repository2.NewRepository,
+	repository2.NewUserRepository,
 )
 
 func newApp(*viper.Viper, *log.Logger) (*gin.Engine, func(), error) {

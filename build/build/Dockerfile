@@ -3,7 +3,11 @@ RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk
 
 ARG APP_RELATIVE_PATH
 
+<<<<<<< HEAD:scripts/build/Dockerfile
 COPY ../../deploy /data/app
+=======
+COPY ../../scripts /data/app
+>>>>>>> 04be469 (调整模板):build/build/Dockerfile
 WORKDIR /data/app
 
 RUN rm -rf /data/app/bin/

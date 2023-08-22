@@ -2,19 +2,17 @@ package repository
 
 import (
 	"context"
+	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
+	repository2 "nunu-template/internal/cn/cas/xjipc/blockchain/repository"
 	"testing"
 	"time"
 
-	"github.com/DATA-DOG/go-sqlmock"
-	"nunu-template/internal/model"
-	"nunu-template/internal/repository"
-	"github.com/go-redis/redismock/v9"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-func setupRepository(t *testing.T) (repository.UserRepository, sqlmock.Sqlmock) {
+func setupRepository(t *testing.T) (repository2.UserRepository, sqlmock.Sqlmock) {
 	mockDB, mock, err := sqlmock.New()
 	if err != nil {
 		t.Fatalf("failed to create sqlmock: %v", err)
@@ -30,8 +28,8 @@ func setupRepository(t *testing.T) (repository.UserRepository, sqlmock.Sqlmock) 
 
 	rdb, _ := redismock.NewClientMock()
 
-	repo := repository.NewRepository(db, rdb, nil)
-	userRepo := repository.NewUserRepository(repo)
+	repo := repository2.NewRepository(db, rdb, nil)
+	userRepo := repository2.NewUserRepository(repo)
 
 	return userRepo, mock
 }
