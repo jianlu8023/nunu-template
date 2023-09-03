@@ -18,6 +18,7 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.1
+	github.com/go-redis/redis/v8 v8.0.0
 )
 
 require (
