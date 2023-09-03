@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	handler2 "nunu-template/internal/cn/cas/xjipc/blockchain/handler"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
-	middleware2 "nunu-template/internal/cn/cas/xjipc/blockchain/pkg/middleware"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/pkg/request"
+	"nunu-template/internal/handler"
+	"nunu-template/internal/model"
+	"nunu-template/internal/pkg/middleware"
+	"nunu-template/internal/pkg/request"
 	jwt2 "nunu-template/pkg/jwt"
 	"nunu-template/test/mocks/service"
 
@@ -29,7 +29,7 @@ var (
 	token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJ5aHM2SGVzZmdGIiwiZXhwIjoxNjkzOTE0ODgwLCJuYmYiOjE2ODYxMzg4ODAsImlhdCI6MTY4NjEzODg4MH0.NnFrZFgc_333a9PXqaoongmIDksNvQoHzgM_IhJM4MQ"
 )
 var logger *log.Logger
-var hdl *handler2.Handler
+var hdl *handler.Handler
 var jwt *jwt2.JWT
 var router *gin.Engine
 
@@ -42,15 +42,15 @@ func TestMain(m *testing.M) {
 	conf := config.NewConfig()
 
 	logger = log.NewLog(conf)
-	hdl = handler2.NewHandler(logger)
+	hdl = handler.NewHandler(logger)
 
 	jwt = jwt2.NewJwt(conf)
 	gin.SetMode(gin.TestMode)
 	router = gin.Default()
 	router.Use(
-		middleware2.CORSMiddleware(),
-		middleware2.ResponseLogMiddleware(logger),
-		middleware2.RequestLogMiddleware(logger),
+		middleware.CORSMiddleware(),
+		middleware.ResponseLogMiddleware(logger),
+		middleware.RequestLogMiddleware(logger),
 		//middleware.SignMiddleware(log),
 	)
 
@@ -73,7 +73,7 @@ func TestUserHandler_Register(t *testing.T) {
 	mockUserService := mock_service.NewMockUserService(ctrl)
 	mockUserService.EXPECT().Register(gomock.Any(), &params).Return(nil)
 
-	userHandler := handler2.NewUserHandler(hdl, mockUserService)
+	userHandler := handler.NewUserHandler(hdl, mockUserService)
 	router.POST("/register", userHandler.Register)
 
 	paramsJson, _ := json.Marshal(params)
@@ -96,7 +96,7 @@ func TestUserHandler_Login(t *testing.T) {
 	mockUserService := mock_service.NewMockUserService(ctrl)
 	mockUserService.EXPECT().Login(gomock.Any(), &params).Return(token, nil)
 
-	userHandler := handler2.NewUserHandler(hdl, mockUserService)
+	userHandler := handler.NewUserHandler(hdl, mockUserService)
 	router.POST("/login", userHandler.Login)
 	paramsJson, _ := json.Marshal(params)
 
@@ -120,8 +120,8 @@ func TestUserHandler_GetProfile(t *testing.T) {
 		Email:    "xxxxx@gmail.com",
 	}, nil)
 
-	userHandler := handler2.NewUserHandler(hdl, mockUserService)
-	router.Use(middleware2.NoStrictAuth(jwt, logger))
+	userHandler := handler.NewUserHandler(hdl, mockUserService)
+	router.Use(middleware.NoStrictAuth(jwt, logger))
 	router.GET("/user", userHandler.GetProfile)
 	req, _ := http.NewRequest("GET", "/user", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
@@ -146,8 +146,8 @@ func TestUserHandler_UpdateProfile(t *testing.T) {
 	mockUserService := mock_service.NewMockUserService(ctrl)
 	mockUserService.EXPECT().UpdateProfile(gomock.Any(), userId, &params).Return(nil)
 
-	userHandler := handler2.NewUserHandler(hdl, mockUserService)
-	router.Use(middleware2.StrictAuth(jwt, logger))
+	userHandler := handler.NewUserHandler(hdl, mockUserService)
+	router.Use(middleware.StrictAuth(jwt, logger))
 	router.PUT("/user", userHandler.UpdateProfile)
 	paramsJson, _ := json.Marshal(params)
 

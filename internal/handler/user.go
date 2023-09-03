@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"net/http"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/pkg/request"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/service"
+	"nunu-template/internal/pkg/request"
+	"nunu-template/internal/service"
 	"nunu-template/pkg/helper/resp"
 )
 

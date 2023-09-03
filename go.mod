@@ -59,4 +59,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.8.0
+replace github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.8.2
