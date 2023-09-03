@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
+	"nunu-template/internal/model"
 )
 
 type UserRepository interface {

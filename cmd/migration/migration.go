@@ -3,7 +3,7 @@ package main
 import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
+	"nunu-template/internal/model"
 	"nunu-template/pkg/log"
 )
 

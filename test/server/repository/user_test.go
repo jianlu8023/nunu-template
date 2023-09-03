@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
-	repository2 "nunu-template/internal/cn/cas/xjipc/blockchain/repository"
+	"nunu-template/internal/model"
+	"nunu-template/internal/repository"
 	"testing"
 	"time"
 
@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func setupRepository(t *testing.T) (repository2.UserRepository, sqlmock.Sqlmock) {
+func setupRepository(t *testing.T) (repository.UserRepository, sqlmock.Sqlmock) {
 	mockDB, mock, err := sqlmock.New()
 	if err != nil {
 		t.Fatalf("failed to create sqlmock: %v", err)
@@ -28,8 +28,8 @@ func setupRepository(t *testing.T) (repository2.UserRepository, sqlmock.Sqlmock)
 
 	rdb, _ := redismock.NewClientMock()
 
-	repo := repository2.NewRepository(db, rdb, nil)
-	userRepo := repository2.NewUserRepository(repo)
+	repo := repository.NewRepository(db, rdb, nil)
+	userRepo := repository.NewUserRepository(repo)
 
 	return userRepo, mock
 }

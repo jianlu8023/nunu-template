@@ -9,7 +9,7 @@ package main
 import (
 	"github.com/google/wire"
 	"github.com/spf13/viper"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/job"
+	"nunu-template/internal/job"
 	"nunu-template/pkg/log"
 )
 
