@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/model"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/pkg/request"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/repository"
+	"nunu-template/internal/model"
+	"nunu-template/internal/pkg/request"
+	"nunu-template/internal/repository"
 	"time"
 )
 

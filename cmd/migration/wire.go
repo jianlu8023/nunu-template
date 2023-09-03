@@ -6,15 +6,15 @@ package main
 import (
 	"github.com/google/wire"
 	"github.com/spf13/viper"
-	repository2 "nunu-template/internal/cn/cas/xjipc/blockchain/repository"
+	"nunu-template/internal/repository"
 	"nunu-template/pkg/log"
 )
 
 var RepositorySet = wire.NewSet(
-	repository2.NewDB,
-	repository2.NewRedis,
-	repository2.NewRepository,
-	repository2.NewUserRepository,
+	repository.NewDB,
+	repository.NewRedis,
+	repository.NewRepository,
+	repository.NewUserRepository,
 )
 
 func newApp(*viper.Viper, *log.Logger) (*Migrate, func(), error) {

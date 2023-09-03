@@ -18,10 +18,11 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.1
+	github.com/go-redis/redis/v8 v8.11.5
 )
 
 require (
-	github.com/go-redis/redis/v8 v8.11.5
+
 	go.uber.org/atomic v1.11.0 // indirect
 )
 

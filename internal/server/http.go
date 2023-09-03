@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"nunu-template/internal/cn/cas/xjipc/blockchain/handler"
-	middleware2 "nunu-template/internal/cn/cas/xjipc/blockchain/pkg/middleware"
+	"nunu-template/internal/handler"
+	"nunu-template/internal/pkg/middleware"
 	"nunu-template/pkg/helper/resp"
 	"nunu-template/pkg/jwt"
 	"nunu-template/pkg/log"
@@ -18,9 +18,9 @@ func NewServerHTTP(
 	r := gin.Default()
 
 	r.Use(
-		middleware2.CORSMiddleware(),
-		middleware2.ResponseLogMiddleware(logger),
-		middleware2.RequestLogMiddleware(logger),
+		middleware.CORSMiddleware(),
+		middleware.ResponseLogMiddleware(logger),
+		middleware.RequestLogMiddleware(logger),
 		//middleware.SignMiddleware(log),
 	)
 
@@ -39,13 +39,13 @@ func NewServerHTTP(
 		noAuthRouter.POST("/login", userHandler.Login)
 	}
 	// Non-strict permission routing group
-	noStrictAuthRouter := r.Group("/").Use(middleware2.NoStrictAuth(jwt, logger))
+	noStrictAuthRouter := r.Group("/").Use(middleware.NoStrictAuth(jwt, logger))
 	{
 		noStrictAuthRouter.GET("/user", userHandler.GetProfile)
 	}
 
 	// Strict permission routing group
-	strictAuthRouter := r.Group("/").Use(middleware2.StrictAuth(jwt, logger))
+	strictAuthRouter := r.Group("/").Use(middleware.StrictAuth(jwt, logger))
 	{
 		strictAuthRouter.PUT("/user", userHandler.UpdateProfile)
 	}
