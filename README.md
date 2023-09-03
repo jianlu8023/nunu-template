@@ -181,4 +181,4 @@ If you find any issues or have any improvement suggestions, please feel free to 
 
 ## License
 
-Nunu is released under the MIT License. See the [LICENSE](LICENSE) file for more information.
+Nunu is released under the MIT License. See the [LICENSE](third_licenses/github.com/go-nunu/nunu-layout-advanced/LICENSE) file for more information.
