@@ -5,7 +5,8 @@ go 1.17
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-co-op/gocron v1.28.2
-	github.com/golang-jwt/jwt/v5 v5.0.0
+	github.com/go-redis/redis/v8 v8.11.5
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
@@ -18,10 +19,7 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.1
-	github.com/go-redis/redis/v8 v8.11.5
 )
-
-
 
 require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect

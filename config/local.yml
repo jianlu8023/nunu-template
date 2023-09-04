@@ -9,9 +9,9 @@ security:
     key: QQYnRFerJTSEcrfB89fw8prOaObmrch8
 data:
   mysql:
-    user: root:123456@tcp(192.168.58.128:3306)/go?charset=utf8mb4&parseTime=True&loc=Local
+    user: root:123456@tcp(192.168.58.131:3306)/basic?charset=utf8mb4&parseTime=True&loc=Local
   redis:
-    addr: 192.168.58.128:6379
+    addr: 192.168.58.131:6379
     password: "123456"
     db: 0
     read_timeout: 0.2s
