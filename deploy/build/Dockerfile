@@ -1,17 +1,16 @@
-FROM golang:1.18-alpine3.16 AS builder
+FROM golang:1.17-alpine3.16 AS builder
 RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 
 ARG APP_RELATIVE_PATH
 
-<<<<<<< HEAD:scripts/build/Dockerfile
-COPY ../../deploy /data/app
-=======
-COPY ../../scripts /data/app
->>>>>>> 04be469 (调整模板):build/build/Dockerfile
+ENV GOPROXY=https://goproxy.cn,direct
+
+COPY .. /data/app
 WORKDIR /data/app
 
+
 RUN rm -rf /data/app/bin/
-RUN export GOPROXY=https://goproxy.cn,direct && go mod tidy && go build -ldflags="-s -w" -o ./bin/server ${APP_RELATIVE_PATH}
+RUN go mod tidy && go build -ldflags="-s -w" -o ./bin/server ${APP_RELATIVE_PATH}
 RUN mv config /data/app/bin/
 
 

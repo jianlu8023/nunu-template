@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
 	"net/http"
-	"nunu-template/internal/pkg/request"
+
+	"github.com/gin-gonic/gin"
+	"nunu-template/internal/pkg/request/user"
+	"nunu-template/internal/pkg/response"
 	"nunu-template/internal/service"
-	"nunu-template/pkg/helper/resp"
 )
 
 type UserHandler interface {
@@ -29,34 +29,34 @@ func NewUserHandler(handler *Handler, userService service.UserService) UserHandl
 }
 
 func (h *userHandler) Register(ctx *gin.Context) {
-	req := new(request.RegisterRequest)
+	req := new(user.RegisterRequest)
 	if err := ctx.ShouldBindJSON(req); err != nil {
-		resp.HandleError(ctx, http.StatusBadRequest, 1, errors.Wrap(err, "invalid request").Error(), nil)
+		response.HandleError(ctx, http.StatusOK, response.ErrBadRequest, nil)
 		return
 	}
 
 	if err := h.userService.Register(ctx, req); err != nil {
-		resp.HandleError(ctx, http.StatusBadRequest, 1, errors.Wrap(err, "invalid request").Error(), nil)
+		response.HandleError(ctx, http.StatusOK, err, nil)
 		return
 	}
 
-	resp.HandleSuccess(ctx, nil)
+	response.HandleSuccess(ctx, nil)
 }
 
 func (h *userHandler) Login(ctx *gin.Context) {
-	var req request.LoginRequest
+	var req user.LoginRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		resp.HandleError(ctx, http.StatusBadRequest, 1, errors.Wrap(err, "invalid request").Error(), nil)
+		response.HandleError(ctx, http.StatusOK, response.ErrBadRequest, nil)
 		return
 	}
 
 	token, err := h.userService.Login(ctx, &req)
 	if err != nil {
-		resp.HandleError(ctx, http.StatusUnauthorized, 1, err.Error(), nil)
+		response.HandleError(ctx, http.StatusOK, response.ErrUnauthorized, nil)
 		return
 	}
 
-	resp.HandleSuccess(ctx, gin.H{
+	response.HandleSuccess(ctx, gin.H{
 		"accessToken": token,
 	})
 }
@@ -64,32 +64,32 @@ func (h *userHandler) Login(ctx *gin.Context) {
 func (h *userHandler) GetProfile(ctx *gin.Context) {
 	userId := GetUserIdFromCtx(ctx)
 	if userId == "" {
-		resp.HandleError(ctx, http.StatusUnauthorized, 1, "unauthorized", nil)
+		response.HandleError(ctx, http.StatusOK, response.ErrUnauthorized, nil)
 		return
 	}
 
 	user, err := h.userService.GetProfile(ctx, userId)
 	if err != nil {
-		resp.HandleError(ctx, http.StatusBadRequest, 1, err.Error(), nil)
+		response.HandleError(ctx, http.StatusOK, err, nil)
 		return
 	}
 
-	resp.HandleSuccess(ctx, user)
+	response.HandleSuccess(ctx, user)
 }
 
 func (h *userHandler) UpdateProfile(ctx *gin.Context) {
 	userId := GetUserIdFromCtx(ctx)
 
-	var req request.UpdateProfileRequest
+	var req user.UpdateProfileRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		resp.HandleError(ctx, http.StatusBadRequest, 1, errors.Wrap(err, "invalid request").Error(), nil)
+		response.HandleError(ctx, http.StatusOK, response.ErrBadRequest, nil)
 		return
 	}
 
 	if err := h.userService.UpdateProfile(ctx, userId, &req); err != nil {
-		resp.HandleError(ctx, http.StatusBadRequest, 1, err.Error(), nil)
+		response.HandleError(ctx, http.StatusOK, response.ErrUpdateUser, nil)
 		return
 	}
 
-	resp.HandleSuccess(ctx, nil)
+	response.HandleSuccess(ctx, nil)
 }

@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"testing"
+
 	"nunu-template/internal/model"
-	"nunu-template/internal/pkg/request"
+	"nunu-template/internal/pkg/request/user"
 	"nunu-template/internal/service"
 	"nunu-template/pkg/jwt"
 	"nunu-template/test/mocks/repository"
-	"os"
-	"testing"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -54,7 +55,7 @@ func TestUserService_Register(t *testing.T) {
 	userService := service.NewUserService(srv, mockUserRepo)
 
 	ctx := context.Background()
-	req := &request.RegisterRequest{
+	req := &user.RegisterRequest{
 		Username: "testuser",
 		Password: "password",
 		Email:    "test@example.com",
@@ -77,7 +78,7 @@ func TestUserService_Register_UsernameExists(t *testing.T) {
 	userService := service.NewUserService(srv, mockUserRepo)
 
 	ctx := context.Background()
-	req := &request.RegisterRequest{
+	req := &user.RegisterRequest{
 		Username: "testuser",
 		Password: "password",
 		Email:    "test@example.com",
@@ -99,7 +100,7 @@ func TestUserService_Login(t *testing.T) {
 	userService := service.NewUserService(srv, mockUserRepo)
 
 	ctx := context.Background()
-	req := &request.LoginRequest{
+	req := &user.LoginRequest{
 		Username: "testuser",
 		Password: "password",
 	}
@@ -127,7 +128,7 @@ func TestUserService_Login_UserNotFound(t *testing.T) {
 	userService := service.NewUserService(srv, mockUserRepo)
 
 	ctx := context.Background()
-	req := &request.LoginRequest{
+	req := &user.LoginRequest{
 		Username: "testuser",
 		Password: "password",
 	}
@@ -174,7 +175,7 @@ func TestUserService_UpdateProfile(t *testing.T) {
 
 	ctx := context.Background()
 	userId := "123"
-	req := &request.UpdateProfileRequest{
+	req := &user.UpdateProfileRequest{
 		Nickname: "testuser",
 		Email:    "test@example.com",
 	}
@@ -201,7 +202,7 @@ func TestUserService_UpdateProfile_UserNotFound(t *testing.T) {
 
 	ctx := context.Background()
 	userId := "123"
-	req := &request.UpdateProfileRequest{
+	req := &user.UpdateProfileRequest{
 		Nickname: "testuser",
 		Email:    "test@example.com",
 	}

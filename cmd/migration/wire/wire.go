@@ -1,11 +1,12 @@
 //go:build wireinject
 // +build wireinject
 
-package main
+package wire
 
 import (
 	"github.com/google/wire"
 	"github.com/spf13/viper"
+	"nunu-template/cmd/migration/internal"
 	"nunu-template/internal/repository"
 	"nunu-template/pkg/log"
 )
@@ -17,9 +18,9 @@ var RepositorySet = wire.NewSet(
 	repository.NewUserRepository,
 )
 
-func newApp(*viper.Viper, *log.Logger) (*Migrate, func(), error) {
+func NewApp(*viper.Viper, *log.Logger) (*internal.Migrate, func(), error) {
 	panic(wire.Build(
 		RepositorySet,
-		NewMigrate,
+		internal.NewMigrate,
 	))
 }

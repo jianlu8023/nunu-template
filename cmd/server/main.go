@@ -2,17 +2,19 @@ package main
 
 import (
 	"fmt"
+
+	"go.uber.org/zap"
+	"nunu-template/cmd/server/wire"
 	"nunu-template/pkg/config"
 	"nunu-template/pkg/http"
 	"nunu-template/pkg/log"
-	"go.uber.org/zap"
 )
 
 func main() {
 	conf := config.NewConfig()
 	logger := log.NewLog(conf)
 
-	app, cleanup, err := newApp(conf, logger)
+	app, cleanup, err := wire.NewApp(conf, logger)
 	if err != nil {
 		panic(err)
 	}
