@@ -2,19 +2,20 @@ package service
 
 import (
 	"context"
-	"github.com/pkg/errors"
+	"time"
+
 	"golang.org/x/crypto/bcrypt"
 	"nunu-template/internal/model"
-	"nunu-template/internal/pkg/request"
+	"nunu-template/internal/pkg/request/user"
+	"nunu-template/internal/pkg/response"
 	"nunu-template/internal/repository"
-	"time"
 )
 
 type UserService interface {
-	Register(ctx context.Context, req *request.RegisterRequest) error
-	Login(ctx context.Context, req *request.LoginRequest) (string, error)
+	Register(ctx context.Context, req *user.RegisterRequest) error
+	Login(ctx context.Context, req *user.LoginRequest) (string, error)
 	GetProfile(ctx context.Context, userId string) (*model.User, error)
-	UpdateProfile(ctx context.Context, userId string, req *request.UpdateProfileRequest) error
+	UpdateProfile(ctx context.Context, userId string, req *user.UpdateProfileRequest) error
 }
 
 type userService struct {
@@ -29,20 +30,20 @@ func NewUserService(service *Service, userRepo repository.UserRepository) UserSe
 	}
 }
 
-func (s *userService) Register(ctx context.Context, req *request.RegisterRequest) error {
+func (s *userService) Register(ctx context.Context, req *user.RegisterRequest) error {
 	// 检查用户名是否已存在
 	if user, err := s.userRepo.GetByUsername(ctx, req.Username); err == nil && user != nil {
-		return errors.New("username already exists")
+		return response.ErrUsernameAlreadyUse
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return errors.Wrap(err, "failed to hash password")
+		return response.ErrUserPassWordEncrypt
 	}
 	// Generate user ID
 	userId, err := s.sid.GenString()
 	if err != nil {
-		return errors.Wrap(err, "failed to generate user ID")
+		return response.ErrUserNotFound
 	}
 	// Create a user
 	user := &model.User{
@@ -52,25 +53,25 @@ func (s *userService) Register(ctx context.Context, req *request.RegisterRequest
 		Email:    req.Email,
 	}
 	if err = s.userRepo.Create(ctx, user); err != nil {
-		return errors.Wrap(err, "failed to create user")
+		return response.ErrCreateUser
 	}
 
 	return nil
 }
 
-func (s *userService) Login(ctx context.Context, req *request.LoginRequest) (string, error) {
+func (s *userService) Login(ctx context.Context, req *user.LoginRequest) (string, error) {
 	user, err := s.userRepo.GetByUsername(ctx, req.Username)
 	if err != nil || user == nil {
-		return "", errors.Wrap(err, "failed to get user by username")
+		return "", response.ErrUsernameAlreadyUse
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
-		return "", errors.Wrap(err, "failed to hash password")
+		return "", response.ErrEncryptPassword
 	}
 	token, err := s.jwt.GenToken(user.UserId, time.Now().Add(time.Hour*24*90))
 	if err != nil {
-		return "", errors.Wrap(err, "failed to generate JWT token")
+		return "", response.ErrGenJWT
 	}
 
 	return token, nil
@@ -79,23 +80,23 @@ func (s *userService) Login(ctx context.Context, req *request.LoginRequest) (str
 func (s *userService) GetProfile(ctx context.Context, userId string) (*model.User, error) {
 	user, err := s.userRepo.GetByID(ctx, userId)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get user by ID")
+		return nil, response.ErrUsernameAlreadyUse
 	}
 
 	return user, nil
 }
 
-func (s *userService) UpdateProfile(ctx context.Context, userId string, req *request.UpdateProfileRequest) error {
+func (s *userService) UpdateProfile(ctx context.Context, userId string, req *user.UpdateProfileRequest) error {
 	user, err := s.userRepo.GetByID(ctx, userId)
 	if err != nil {
-		return errors.Wrap(err, "failed to get user by ID")
+		return response.ErrUsernameAlreadyUse
 	}
 
 	user.Email = req.Email
 	user.Nickname = req.Nickname
 
 	if err = s.userRepo.Update(ctx, user); err != nil {
-		return errors.Wrap(err, "failed to update user")
+		return response.ErrUpdateUser
 	}
 
 	return nil

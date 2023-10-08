@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package main
+package wire
 
 import (
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,7 @@ import (
 
 // Injectors from wire.go:
 
-func newApp(viperViper *viper.Viper, logger *log.Logger) (*gin.Engine, func(), error) {
+func NewApp(viperViper *viper.Viper, logger *log.Logger) (*gin.Engine, func(), error) {
 	jwtJWT := jwt.NewJwt(viperViper)
 	handlerHandler := handler.NewHandler(logger)
 	sidSid := sid.NewSid()

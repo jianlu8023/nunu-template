@@ -1,6 +1,7 @@
 package main
 
 import (
+	"nunu-template/cmd/job/wire"
 	"nunu-template/pkg/config"
 	"nunu-template/pkg/log"
 )
@@ -10,7 +11,7 @@ func main() {
 	logger := log.NewLog(conf)
 	logger.Info("start")
 
-	app, cleanup, err := newApp(conf, logger)
+	app, cleanup, err := wire.NewApp(conf, logger)
 	if err != nil {
 		panic(err)
 	}

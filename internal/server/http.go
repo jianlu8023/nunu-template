@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"nunu-template/internal/handler"
 	"nunu-template/internal/pkg/middleware"
-	"nunu-template/pkg/helper/resp"
+	"nunu-template/internal/pkg/response"
 	"nunu-template/pkg/jwt"
 	"nunu-template/pkg/log"
 )
@@ -30,7 +30,7 @@ func NewServerHTTP(
 
 		noAuthRouter.GET("/", func(ctx *gin.Context) {
 			logger.WithContext(ctx).Info("hello")
-			resp.HandleSuccess(ctx, map[string]interface{}{
+			response.HandleSuccess(ctx, map[string]interface{}{
 				"say": "Hi Nunu!",
 			})
 		})

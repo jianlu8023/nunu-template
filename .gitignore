@@ -1,6 +1,6 @@
 storage
 .idea
 *.log
-build/docker-compose/conf
-build/docker-compose/data
+deploy/docker-compose/conf
+deploy/docker-compose/data
 vendor

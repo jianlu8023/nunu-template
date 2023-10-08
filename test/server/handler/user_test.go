@@ -4,17 +4,17 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"nunu-template/internal/handler"
-	"nunu-template/internal/model"
-	"nunu-template/internal/pkg/middleware"
-	"nunu-template/internal/pkg/request"
-	jwt2 "nunu-template/pkg/jwt"
-	"nunu-template/test/mocks/service"
-
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
+
+	"nunu-template/internal/handler"
+	"nunu-template/internal/model"
+	"nunu-template/internal/pkg/middleware"
+	"nunu-template/internal/pkg/request/user"
+	jwt2 "nunu-template/pkg/jwt"
+	"nunu-template/test/mocks/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
@@ -64,7 +64,7 @@ func TestUserHandler_Register(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	params := request.RegisterRequest{
+	params := user.RegisterRequest{
 		Username: "xxx",
 		Password: "123456",
 		Email:    "xxx@gmail.com",
@@ -88,7 +88,7 @@ func TestUserHandler_Login(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	params := request.LoginRequest{
+	params := user.LoginRequest{
 		Username: "xxx",
 		Password: "123456",
 	}
@@ -137,7 +137,7 @@ func TestUserHandler_UpdateProfile(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	params := request.UpdateProfileRequest{
+	params := user.UpdateProfileRequest{
 		Nickname: "alan",
 		Email:    "alan@gmail.com",
 		Avatar:   "xxx",

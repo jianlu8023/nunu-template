@@ -1,14 +1,15 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 	"net/http"
-	"nunu-template/pkg/helper/md5"
-	"nunu-template/pkg/helper/resp"
-	"nunu-template/pkg/log"
 	"sort"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"nunu-template/internal/pkg/response"
+	"nunu-template/pkg/helper/md5"
+	"nunu-template/pkg/log"
 )
 
 func SignMiddleware(logger *log.Logger, conf *viper.Viper) gin.HandlerFunc {
@@ -18,7 +19,7 @@ func SignMiddleware(logger *log.Logger, conf *viper.Viper) gin.HandlerFunc {
 		for _, header := range requiredHeaders {
 			value, ok := ctx.Request.Header[header]
 			if !ok || len(value) == 0 {
-				resp.HandleError(ctx, http.StatusBadRequest, 1, "sign error.", nil)
+				response.HandleError(ctx, http.StatusOK, response.ErrBadRequest, nil)
 				ctx.Abort()
 				return
 			}
@@ -44,7 +45,7 @@ func SignMiddleware(logger *log.Logger, conf *viper.Viper) gin.HandlerFunc {
 		str += conf.GetString("security.api_sign.app_security")
 
 		if ctx.Request.Header.Get("Sign") != strings.ToUpper(md5.Md5(str)) {
-			resp.HandleError(ctx, http.StatusBadRequest, 1, "sign error.", nil)
+			response.HandleError(ctx, http.StatusOK, response.ErrBadRequest, nil)
 			ctx.Abort()
 			return
 		}
